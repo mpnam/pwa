@@ -2,7 +2,8 @@ import { USER_CLEAR, USER_FETCH } from '../actions/constants';
 
 
 const initialSate = {
-    username: ""
+    username: "",
+    avatar: ""
 };
 
 export default function users(state = initialSate, action) {
@@ -10,7 +11,7 @@ export default function users(state = initialSate, action) {
         case USER_CLEAR:
             return initialSate;
         case USER_FETCH:
-            return { username: action.username };
+            return { username: action.username, avatar: action.avatar };
         default:
             return state;
     }

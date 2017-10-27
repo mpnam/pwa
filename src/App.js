@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { Layout, Icon, Row, Col } from 'antd';
+import { BrowserRouter, Route } from 'react-router-dom';
+import { Layout, Row, Col } from 'antd';
 
 import UserHeader from './components/UserHeader';
 import SideMenu from './components/SideMenu';
@@ -9,11 +9,21 @@ import Login from './views/Login';
 import ImportFile from './views/ImportFile';
 
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { firebaseAuth } from './config';
+import { userFetchInformation } from './actions/users';
 
 import './App.css';
 
 
 class App extends Component {
+    componentWillMount(){
+        firebaseAuth().onAuthStateChanged(user => {
+            if (user != null)
+                this.props.userFetchInformation(user.displayName, user.photoURL);
+        });
+    }
+
     render() {
         return (
             <BrowserRouter>
@@ -59,4 +69,6 @@ const mapStateToProps = (state) => ({
     routes: state.routes
 });
 
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = (dispatch) => bindActionCreators({ userFetchInformation }, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

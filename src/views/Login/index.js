@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import { Form, Icon, Input, Button, Checkbox, notification } from 'antd';
 
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -7,6 +7,8 @@ import { bindActionCreators } from 'redux';
 
 import { changeScreen } from '../../actions/routes';
 import { userFetchInformation } from '../../actions/users';
+import { loginWithGoogle } from '../../libs/auth';
+import { firebaseAuth } from '../../config';
 
 import './styles.css';
 
@@ -14,6 +16,12 @@ import './styles.css';
 class Login extends Component {
     componentWillMount() {
         this.props.changeScreen("Sign in");
+        firebaseAuth().onAuthStateChanged(user => {
+            if (user != null) {
+                this.props.userFetchInformation(user.displayName, user.photoURL);
+                this.props.history.push("/");
+            }
+        });
     }
 
     render() {
@@ -45,7 +53,10 @@ class Login extends Component {
                     <Button type="primary" htmlType="submit" className="login-form-button">
                         Log in
                     </Button>
-                    Or <a href="">register now!</a>
+                    <center>OR</center>          
+                    <Button type="dash" className="login-form-button" onClick={this._googleSignIn}>
+                        Log in with Google
+                    </Button>
                 </Form.Item>
             </Form>
         );
@@ -59,6 +70,16 @@ class Login extends Component {
                 this.props.userFetchInformation(values.userName);
                 this.props.history.push("/");
             }
+        });
+    }
+
+    _googleSignIn = () => {
+        loginWithGoogle().catch(function (error) {
+            notification.open({
+                message: 'Error',
+                description: error,
+                icon: <Icon type="frown-o" />,
+            });
         });
     }
 }

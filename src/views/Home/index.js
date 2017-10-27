@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout, Timeline, Icon } from 'antd';
+import { Timeline, Icon } from 'antd';
 
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';

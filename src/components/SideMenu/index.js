@@ -3,18 +3,15 @@ import { Menu, Icon } from 'antd';
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 
+import { logout } from '../../libs/auth';
+import { userLoggedOut } from '../../actions/users';
 
 class SideMenu extends Component {
     static propsTypes = {
         username: PropTypes.string
-    }
-
-    constructor(props) {
-        super(props);
-
-        console.log("[SideMenu]", props);
     }
 
     render() {
@@ -30,6 +27,13 @@ class SideMenu extends Component {
                         <span>Import Data</span>
                     </Menu.Item> : null
                 }
+                <Menu.Divider />
+                {(this.props.username !== "")?
+                    <Menu.Item key="logout">
+                        <Icon type="logout" />
+                        <span>Sign out</span>
+                    </Menu.Item> : null
+                }
             </Menu>
         );
     }
@@ -38,6 +42,10 @@ class SideMenu extends Component {
         switch (e.key) {
             case "import":
                 this.props.history.push('/import');
+                break;
+            case "logout":
+                logout();
+                this.props.userLoggedOut();
                 break;
             default:
                 this.props.history.push("/");
@@ -49,4 +57,6 @@ const mapStateToProps = (state) => ({
     username: state.users.username
 });
 
-export default withRouter(connect(mapStateToProps)(SideMenu));
+const mapDispatchToProps = (dispatch) => bindActionCreators({ userLoggedOut }, dispatch);
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SideMenu));
