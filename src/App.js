@@ -1,21 +1,54 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Layout, Icon } from 'antd';
+
+import SideMenu from './components/SideMenu';
+import Home from './views/Home';
+import ImportFile from './views/ImportFile';
+
 import './App.css';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
-}
 
-export default App;
+export default class App extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            collapsed: false
+        }
+    }
+
+    render() {
+        return (
+            <BrowserRouter>
+                <Layout>
+                    <Layout>
+                        <Layout.Sider trigger={null} collapsible collapsed={this.state.collapsed}>
+                            <div className="logo" />
+                            <SideMenu />
+                        </Layout.Sider>
+                        
+                        <Layout>
+                            <Layout.Header style={{ background: '#fff', padding: 0 }}>
+                                <Icon className="trigger" type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'} onClick={this._toggle} />                      
+                            </Layout.Header>
+                            <Layout.Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 500 }}>
+                                    <Route exact path="/" component={Home} />
+                                    <Route exact path="/import" component={ImportFile} />
+                            </Layout.Content>
+                        </Layout>
+                    </Layout>
+                    <Layout.Footer>
+                        <center>Demo PWA with ReactJS</center>
+                    </Layout.Footer>
+                </Layout>
+            </BrowserRouter>
+        );
+    }
+    
+    _toggle = () => {
+        this.setState({
+            collapsed: !this.state.collapsed
+        });
+    }
+}

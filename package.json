@@ -4,10 +4,14 @@
   "homepage": "https://mpnam.github.io/pwa",
   "private": true,
   "dependencies": {
+    "antd": "^2.13.7",
     "gh-pages": "^1.0.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
-    "react-scripts": "1.0.14"
+    "react-dropzone": "^4.2.1",
+    "react-router-dom": "^4.2.2",
+    "react-scripts": "1.0.14",
+    "xlsx": "^0.11.6"
   },
   "scripts": {
     "start": "react-scripts start",
