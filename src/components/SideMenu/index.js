@@ -1,8 +1,22 @@
 import React, { Component } from 'react';
 import { Menu, Icon } from 'antd';
+
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
+
 class SideMenu extends Component {
+    static propsTypes = {
+        username: PropTypes.string
+    }
+
+    constructor(props) {
+        super(props);
+
+        console.log("[SideMenu]", props);
+    }
+
     render() {
         return (
             <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} onClick={this._onClick}>
@@ -10,11 +24,12 @@ class SideMenu extends Component {
                     <Icon type="home" />
                     <span>Home</span>
                 </Menu.Item>
-
-                <Menu.Item key="import">
-                    <Icon type="file-text" />
-                    <span>Load Excel</span>
-                </Menu.Item>
+                {(this.props.username !== "")?
+                    <Menu.Item key="import">
+                        <Icon type="file-text" />
+                        <span>Import Data</span>
+                    </Menu.Item> : null
+                }
             </Menu>
         );
     }
@@ -30,4 +45,8 @@ class SideMenu extends Component {
     }
 }
 
-export default withRouter(SideMenu);
+const mapStateToProps = (state) => ({
+    username: state.users.username
+});
+
+export default withRouter(connect(mapStateToProps)(SideMenu));
